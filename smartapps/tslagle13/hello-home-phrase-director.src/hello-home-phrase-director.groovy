@@ -1,4 +1,4 @@
-/**
+    /**
      *  Magic Home
      *
      *  Copyright 2014 Tim Slagle
@@ -125,19 +125,19 @@
       if(allOk) {
     
       if(everyoneIsAway() && (state.sunMode == "sunrise")) {
-        log.debug("Home is Empty  Setting New Away Mode")
+        log.info("Home is Empty  Setting New Away Mode")
         def delay = (falseAlarmThreshold != null && falseAlarmThreshold != "") ? falseAlarmThreshold * 60 : 10 * 60 
         runIn(delay, "setAway")
       }
     
       if(everyoneIsAway() && (state.sunMode == "sunset")) {
-        log.debug("Home is Empty  Setting New Away Mode")
+        log.info("Home is Empty  Setting New Away Mode")
         def delay = (falseAlarmThreshold != null && falseAlarmThreshold != "") ? falseAlarmThreshold * 60 : 10 * 60 
         runIn(delay, "setAway")
       }
       
       else {
-      log.debug("Home is Occupied Setting New Home Mode")
+      log.info("Home is Occupied Setting New Home Mode")
       setHome()
     
     
@@ -152,7 +152,7 @@
         log.debug("Checking if everyone is away")
     
         if(everyoneIsAway()) {
-          log.debug("Nobody is home, running away sequence")
+          log.info("Nobody is home, running away sequence")
           def delay = (falseAlarmThreshold != null && falseAlarmThreshold != "") ? falseAlarmThreshold * 60 : 10 * 60 
           runIn(delay, "setAway")
         }
@@ -161,7 +161,7 @@
     else {
     	def lastTime = state[evt.deviceId]
         if (lastTime == null || now() - lastTime >= 1 * 60000) {
-      		log.debug("Someone is home, running home sequence")
+      		log.info("Someone is home, running home sequence")
       		setHome()
         }    
     	state[evt.deviceId] = now()
@@ -175,14 +175,14 @@
       if(everyoneIsAway()) {
         if(state.sunMode == "sunset") {
           def message = "Performing \"${awayNight}\" for you as requested."
-          log.debug(message)
+          log.info(message)
           sendAway(message)
           location.helloHome.execute(settings.awayNight)
         }
         
         else if(state.sunMode == "sunrise") {
           def message = "Performing \"${awayDay}\" for you as requested."
-          log.debug(message)
+          log.info(message)
           sendAway(message)
           location.helloHome.execute(settings.awayDay)
           }
@@ -192,19 +192,19 @@
       }
     
       else {
-        log.debug("Somebody returned home before we set to '${newAwayMode}'")
+        log.info("Somebody returned home before we set to '${newAwayMode}'")
       }
     }
     
     //set home mode when house is occupied
     def setHome() {
-    sendOutOfDateNotification()
-    log.debug("Setting Home Mode!!")
+    
+    log.info("Setting Home Mode!!")
     if(anyoneIsHome()) {
           if(state.sunMode == "sunset"){
           if (location.mode != "${homeModeNight}"){
           def message = "Performing \"${homeNight}\" for you as requested."
-            log.debug(message)
+            log.info(message)
             sendHome(message)
             location.helloHome.execute(settings.homeNight)
             }
@@ -213,7 +213,7 @@
           if(state.sunMode == "sunrise"){
           if (location.mode != "${homeModeDay}"){
           def message = "Performing \"${homeDay}\" for you as requested."
-            log.debug(message)
+            log.info(message)
             sendHome(message)
             location.helloHome.execute(settings.homeDay)
                 }
@@ -318,15 +318,4 @@
     
     private hideOptionsSection() {
     	(starting || ending || days || modes) ? false : true
-    }
-    
-    def sendOutOfDateNotification(){
-    	if(!state.lastTime){
-    		state.lastTime = (new Date() + 31).getTime()
-            sendNotification("Your version of Hello, Home Phrase Director is currently out of date. Please look for the new version of Hello, Home Phrase Director now called 'Routine Director' in the marketplace.")
-        }
-        else if (((new Date()).getTime()) >= state.lastTime){
-        	sendNotification("Your version of Hello, Home Phrase Director is currently out of date. Please look for the new version of Hello, Home Phrase Director now called 'Routine Director' in the marketplace.")
-        	state.lastTime = (new Date() + 31).getTime()
-        }
     }

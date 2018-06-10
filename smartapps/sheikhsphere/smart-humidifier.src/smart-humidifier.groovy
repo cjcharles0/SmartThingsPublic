@@ -19,9 +19,8 @@ definition(
     author: "Sheikh Dawood",
     description: "Turn on/off humidifier based on relative humidity from a sensor.",
     category: "Convenience",
-    iconUrl: "https://graph.api.smartthings.com/api/devices/icons/st.Weather.weather12-icn",
-    iconX2Url: "https://graph.api.smartthings.com/api/devices/icons/st.Weather.weather12-icn?displaySize=2x",
-    pausable: true
+   iconUrl: "https://graph.api.smartthings.com/api/devices/icons/st.Weather.weather12-icn",
+    iconX2Url: "https://graph.api.smartthings.com/api/devices/icons/st.Weather.weather12-icn?displaySize=2x"
 )
 
 
@@ -78,7 +77,7 @@ def humidityHandler(evt) {
 
 		} else {
          	if (state.lastStatus != "off") {
-                log.debug "Humidity Rose Above $humidityHigh1:  sending SMS and deactivating $mySwitch"
+                log.debug "Humidity Rose Above $humidityHigh1:  sending SMS to $phone1 and deactivating $mySwitch"
                 send("${humiditySensor1.label} sensed high humidity level of ${evt.value}, turning off ${switch1.label}")
                 switch1?.off()
                 state.lastStatus = "off"
@@ -100,7 +99,7 @@ def humidityHandler(evt) {
 
 		} else {
         	if (state.lastStatus != "on") {
-                log.debug "Humidity Dropped Below $humidityLow1:  sending SMS and activating $mySwitch"
+                log.debug "Humidity Dropped Below $humidityLow1:  sending SMS to $phone1 and activating $mySwitch"
                 send("${humiditySensor1.label} sensed low humidity level of ${evt.value}, turning on ${switch1.label}")
                 switch1?.on()
                 state.lastStatus = "on"

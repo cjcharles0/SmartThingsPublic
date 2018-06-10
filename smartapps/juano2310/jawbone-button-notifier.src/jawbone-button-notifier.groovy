@@ -62,7 +62,7 @@ def initialize() {
 }
 
 def sendit(evt) {
-	log.debug "$evt.value: $evt"
+	log.debug "$evt.value: $evt, $settings"
 	sendMessage()
 }
 
@@ -80,6 +80,6 @@ def sendMessage() {
         sendSms phone3, msg
     }
     if (!phone1 && !phone2 && !phone3) {
-    	sendPush msg
+    	sendPush msg    
     }
 }

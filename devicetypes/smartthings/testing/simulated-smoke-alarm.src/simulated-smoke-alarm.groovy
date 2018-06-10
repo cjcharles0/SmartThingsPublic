@@ -15,7 +15,6 @@ metadata {
 	definition (name: "Simulated Smoke Alarm", namespace: "smartthings/testing", author: "SmartThings") {
 		capability "Smoke Detector"
 		capability "Sensor"
-		capability "Health Check"
 
         command "smoke"
         command "test"
@@ -44,11 +43,6 @@ metadata {
         main "main"
 		details(["main", "smoke", "test", "clear"])
 	}
-}
-
-def installed() {
-	sendEvent(name: "DeviceWatch-DeviceStatus", value: "online")
-	sendEvent(name: "healthStatus", value: "online")
 }
 
 def parse(String description) {

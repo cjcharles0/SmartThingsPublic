@@ -1,10 +1,10 @@
-# SmartThings Public GitHub Repo
+# SmartThings Public Github Repo
 
 An official list of SmartApps and Device Types from SmartThings.
 
 Here are some links to help you get started coding right away:
 
-* [GitHub-specific Documentation](http://docs.smartthings.com/en/latest/tools-and-ide/github-integration.html)
+* [Github-specific Documentation](http://docs.smartthings.com/en/latest/tools-and-ide/github-integration.html)
 * [Full Documentation](http://docs.smartthings.com)
 * [IDE & Simulator](http://ide.smartthings.com)
 * [Community Forums](http://community.smartthings.com)

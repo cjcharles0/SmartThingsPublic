@@ -15,7 +15,6 @@
  */
 metadata {
 	definition (name: "Netatmo Basestation", namespace: "dianoga", author: "Brian Steere") {
-		capability "Sensor"
 		capability "Relative Humidity Measurement"
 		capability "Temperature Measurement"
 

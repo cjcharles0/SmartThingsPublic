@@ -1,7 +1,7 @@
 /**
  *  Smart Windows
  *	Compares two temperatures – indoor vs outdoor, for example – then sends an alert if windows are open (or closed!).
- *
+ * 
  *  Copyright 2014 Eric Gideon
  *
  * 	Based in part on the "When it's going to rain" SmartApp by the SmartThings team,
@@ -21,19 +21,13 @@ definition(
 	name: "Smart Windows",
 	namespace: "egid",
 	author: "Eric Gideon",
-	description: "Compares two temperatures – indoor vs outdoor, for example – then sends an alert if windows are open (or closed!). If you don't use an external temperature device, your location will be used instead.",
+	description: "Compares two temperatures – indoor vs outdoor, for example – then sends an alert if windows are open (or closed!). If you don't use an external temperature device, your zipcode will be used instead.",
 	iconUrl: "https://s3.amazonaws.com/smartthings-device-icons/Home/home9-icn.png",
-	iconX2Url: "https://s3.amazonaws.com/smartthings-device-icons/Home/home9-icn@2x.png",
-	pausable: true
+	iconX2Url: "https://s3.amazonaws.com/smartthings-device-icons/Home/home9-icn@2x.png"
 )
 
 
 preferences {
-
-  if (!(location.zipCode || ( location.latitude && location.longitude )) && location.channelName == 'samsungtv') {
-		section { paragraph title: "Note:", "Location is required for this SmartApp. Go to 'Location Name' settings to setup your correct location." }
-	}
-
 	section( "Set the temperature range for your comfort zone..." ) {
 		input "minTemp", "number", title: "Minimum temperature"
 		input "maxTemp", "number", title: "Maximum temperature"
@@ -45,11 +39,9 @@ preferences {
 		input "inTemp", "capability.temperatureMeasurement", title: "Indoor"
 		input "outTemp", "capability.temperatureMeasurement", title: "Outdoor (optional)", required: false
 	}
-
-	if (location.channelName != 'samsungtv') {
-		section( "Set your location" ) { input "zipCode", "text", title: "Zip code" }
-  }
-
+	section( "Set your location" ) {
+		input "zipCode", "text", title: "Zip code"
+	}
 	section( "Notifications" ) {
 		input "sendPushMessage", "enum", title: "Send a push notification?", metadata:[values:["Yes","No"]], required:false
 		input "retryPeriod", "number", title: "Minutes between notifications:"
@@ -80,7 +72,7 @@ def temperatureHandler(evt) {
 
 	def currentInTemp = evt.doubleValue
 	def openWindows = sensors.findAll { it?.latestValue("contact") == 'open' }
-
+	
 	log.trace "Temp event: $evt"
 	log.info "In: $currentInTemp; Out: $currentOutTemp"
 
@@ -106,7 +98,7 @@ def temperatureHandler(evt) {
 			if ( currentOutTemp < maxTemp && !openWindows ) {
 				send( "Open some windows to cool down the house! Currently ${currentInTemp}°F inside and ${currentOutTemp}°F outside." )
 			} else if ( currentOutTemp > maxTemp && openWindows ) {
-				send( "It's gotten warmer outside! You should close these windows: ${openWindows.join(', ')}. Currently ${currentInTemp}°F inside and ${currentOutTemp}°F outside." )
+				send( "It's gotten warmer outside! You should close these windows: ${openWindows.join(', ')}. Currently ${currentInTemp}°F inside and ${currentOutTemp}°F outside." )				
 			} else {
 				log.debug "No notifications sent. Everything is in the right place."
 			}
@@ -133,11 +125,7 @@ def temperatureHandler(evt) {
 }
 
 def weatherCheck() {
-	def json 
-	if (location.channelName != 'samsungtv')
-		json = getWeatherFeature("conditions", zipCode)
-	else
-		json = getWeatherFeature("conditions")
+	def json = getWeatherFeature("conditions", zipCode)
 	def currentTemp = json?.current_observation?.temp_f
 
 	if ( currentTemp ) {

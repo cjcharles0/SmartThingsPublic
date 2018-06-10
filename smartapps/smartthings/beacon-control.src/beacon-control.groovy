@@ -114,16 +114,13 @@ def beaconHandler(evt) {
 
 	if (allOk) {
 		def data = new groovy.json.JsonSlurper().parseText(evt.data)
-                // removed logging of device names. can be added back for debugging
-		//log.debug "<beacon-control> data: $data - phones: " + phones*.deviceNetworkId
+		log.debug "<beacon-control> data: $data - phones: " + phones*.deviceNetworkId
 
 		def beaconName = getBeaconName(evt)
-                // removed logging of device names. can be added back for debugging
-		//log.debug "<beacon-control> beaconName: $beaconName"
+		log.debug "<beacon-control> beaconName: $beaconName"
 
 		def phoneName = getPhoneName(data)
-                // removed logging of device names. can be added back for debugging
-		//log.debug "<beacon-control> phoneName: $phoneName"
+		log.debug "<beacon-control> phoneName: $phoneName"
 		if (phoneName != null) {
             def action = data.presence == "1" ? "arrived" : "left"
             def msg = "$phoneName has $action ${action == 'arrived' ? 'at ' : ''}the $beaconName"

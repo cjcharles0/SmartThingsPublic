@@ -23,8 +23,7 @@ definition(
     description: "Connect and take pictures using your Foscam camera from inside the Smartthings app.",
     category: "SmartThings Internal",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Partner/foscam.png",
-    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Partner/foscam@2x.png",
-    singleInstance: true
+    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Partner/foscam@2x.png"
 )
 
 preferences {

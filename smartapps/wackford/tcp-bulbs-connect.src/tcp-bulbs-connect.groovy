@@ -25,8 +25,7 @@ definition(
 	description: "Connect your TCP bulbs to SmartThings using Cloud to Cloud integration. You must create a remote login acct on TCP Mobile App.",
 	category: "SmartThings Labs",
 	iconUrl: "https://s3.amazonaws.com/smartapp-icons/Partner/tcp.png",
-	iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Partner/tcp@2x.png",
-	singleInstance: true
+	iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Partner/tcp@2x.png"
 )
 
 

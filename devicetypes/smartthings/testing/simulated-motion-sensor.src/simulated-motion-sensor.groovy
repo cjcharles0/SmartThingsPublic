@@ -15,8 +15,6 @@ metadata {
 	// Automatically generated. Make future change here.
 	definition (name: "Simulated Motion Sensor", namespace: "smartthings/testing", author: "bob") {
 		capability "Motion Sensor"
-		capability "Sensor"
-		capability "Health Check"
 
 		command "active"
 		command "inactive"
@@ -29,17 +27,12 @@ metadata {
 
 	tiles {
 		standardTile("motion", "device.motion", width: 2, height: 2) {
-			state("inactive", label:'no motion', icon:"st.motion.motion.inactive", backgroundColor:"#cccccc", action: "active")
-			state("active", label:'motion', icon:"st.motion.motion.active", backgroundColor:"#00A0DC", action: "inactive")
+			state("inactive", label:'no motion', icon:"st.motion.motion.inactive", backgroundColor:"#ffffff", action: "active")
+			state("active", label:'motion', icon:"st.motion.motion.active", backgroundColor:"#53a7c0", action: "inactive")
 		}
 		main "motion"
 		details "motion"
 	}
-}
-
-def installed() {
-	sendEvent(name: "DeviceWatch-DeviceStatus", value: "online")
-	sendEvent(name: "healthStatus", value: "online")
 }
 
 def parse(String description) {

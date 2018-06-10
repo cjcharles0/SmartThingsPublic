@@ -1059,7 +1059,7 @@ private def setupInit() {
 }
 
 private def initialize() {
-    log.debug "Smart Alarm. Version ${getVersion()}. ${textCopyright()}"
+    log.info "Smart Alarm. Version ${getVersion()}. ${textCopyright()}"
     LOG("settings: ${settings}")
 
     clearAlarm()
@@ -1237,10 +1237,10 @@ private def initRestApi() {
             LOG("Created new access token: ${token})")
         }
         state.url = "https://graph.api.smartthings.com/api/smartapps/installations/${app.id}/"
-        log.debug "REST API enabled"
+        log.info "REST API enabled"
     } else {
         state.url = ""
-        log.debug "REST API disabled"
+        log.info "REST API disabled"
     }
 }
 
@@ -1541,7 +1541,7 @@ def activateAlarm() {
     case "Strobe":
         settings.alarms*.strobe()
         break
-
+        
     case "Both":
         settings.alarms*.both()
         break
@@ -1558,7 +1558,7 @@ def activateAlarm() {
     settings.cameras*.take()
 
     if (settings.helloHomeAction) {
-        log.debug "Executing HelloHome action '${settings.helloHomeAction}'"
+        log.info "Executing HelloHome action '${settings.helloHomeAction}'"
         location.helloHome.execute(settings.helloHomeAction)
     }
 
@@ -1576,7 +1576,7 @@ def activateAlarm() {
 private def notify(msg) {
     LOG("notify(${msg})")
 
-    log.debug msg
+    log.info msg
 
     if (state.alarms.size()) {
         // Alarm notification
@@ -1604,7 +1604,7 @@ private def notify(msg) {
 
         if (settings.pushbulletAlarm && settings.pushbullet) {
             settings.pushbullet*.push(location.name, msg)
-        }
+        }   
     } else {
         // Status change notification
         if (settings.pushStatusMessage) {

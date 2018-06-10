@@ -26,8 +26,7 @@ definition(
     iconUrl: "http://i.imgur.com/HU0ANBp.png",
     iconX2Url: "http://i.imgur.com/HU0ANBp.png",
     iconX3Url: "http://i.imgur.com/HU0ANBp.png",
-    oauth: true,
-    singleInstance: true)
+    oauth: true)
 
 
 preferences {

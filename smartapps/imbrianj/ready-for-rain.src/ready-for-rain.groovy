@@ -14,43 +14,25 @@ definition(
   description: "Warn if doors or windows are open when inclement weather is approaching.",
   category: "Convenience",
   iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
-  iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience%402x.png",
-  pausable: true
+  iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience%402x.png"
 )
 
 preferences {
-  page name: "mainPage", install: true, uninstall: true
-}
+  section("Zip code?") {
+    input "zipcode", "text", title: "Zipcode?"
+  }
 
-def mainPage() {
-  dynamicPage(name: "mainPage") {
-    if (!(location.zipCode || ( location.latitude && location.longitude )) && location.channelName == 'samsungtv') {
-      section { paragraph title: "Note:", "Location is required for this SmartApp. Go to 'Location Name' settings to setup your correct location." }
-    }
+  section("Things to check?") {
+    input "sensors", "capability.contactSensor", multiple: true
+  }
 
-    if (location.channelName != 'samsungtv') {
-      section( "Set your location" ) { input "zipCode", "text", title: "Zip code" }
-    }
+  section("Notifications?") {
+    input "sendPushMessage", "enum", title: "Send a push notification?", metadata: [values: ["Yes", "No"]], required: false
+    input "phone", "phone", title: "Send a Text Message?", required: false
+  }
 
-    section("Things to check?") {
-      input "sensors", "capability.contactSensor", multiple: true
-    }
-
-    section("Notifications?") {
-      input "sendPushMessage", "enum", title: "Send a push notification?", metadata: [values: ["Yes", "No"]], required: false
-      if (phone) {
-        input "phone", "phone", title: "Send a Text Message?", required: false
-      }
-    }
-
-    section("Message interval?") {
-      input name: "messageDelay", type: "number", title: "Minutes (default to every message)", required: false
-    }
-
-    section([mobileOnly:true]) {
-      label title: "Assign a name", required: false
-      mode title: "Set for specific mode(s)"
-    }
+  section("Message interval?") {
+    input name: "messageDelay", type: "number", title: "Minutes (default to every message)", required: false
   }
 }
 
@@ -78,11 +60,7 @@ def scheduleCheck(evt) {
   // Only need to poll if we haven't checked in a while - and if something is left open.
   if((now() - (30 * 60 * 1000) > state.lastCheck["time"]) && open) {
     log.info("Something's open - let's check the weather.")
-    def response
-    if (location.channelName != 'samsungtv')
-      response = getWeatherFeature("forecast", zipCode)
-    else
-      response = getWeatherFeature("forecast")
+    def response = getWeatherFeature("forecast", zipcode)
     def weather  = isStormy(response)
 
     if(weather) {

@@ -15,7 +15,7 @@
  */
 definition(
     name: "Sprayer Controller 2",
-    namespace: "sprayercontroller",
+    namespace: "",
     author: "Cooper Lee",
     description: "Control Sprayers for a period of time a number of times per hour",
     category: "My Apps",

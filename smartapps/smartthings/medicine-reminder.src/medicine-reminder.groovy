@@ -22,8 +22,7 @@ definition(
     description: "Set up a reminder so that if you forget to take your medicine (determined by whether a cabinet or drawer has been opened) by specified time you get a notification or text message.",
     category: "Health & Wellness",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Meta/text_contact.png",
-    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Meta/text_contact@2x.png",
-    pausable: true
+    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Meta/text_contact@2x.png"
 )
 
 preferences {

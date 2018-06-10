@@ -20,8 +20,7 @@ definition(
     description: "Turns switch on and off based on moisture sensor input.",
     category: "Safety & Security",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Developers/dry-the-wet-spot.png",
-    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Developers/dry-the-wet-spot@2x.png",
-    pausable: true
+    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Developers/dry-the-wet-spot@2x.png"
 )
 
 

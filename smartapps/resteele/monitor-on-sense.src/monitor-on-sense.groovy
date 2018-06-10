@@ -17,7 +17,7 @@ definition(
     name: "Monitor on Sense",
     namespace: "resteele",
     author: "Rachel Steele",
-    description: "Turn on switch when vibration is sensed",
+    description: "Turn on Monitor when vibration is sensed",
     category: "My Apps",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
     iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png",
@@ -25,10 +25,10 @@ definition(
 
 
 preferences {
-	section("When vibration is sensed...") {
+	section("When the keyboard is used...") {
 		input "accelerationSensor", "capability.accelerationSensor", title: "Which Sensor?"
 	}
-section("Turn on switch...") {
+section("Turn on/off a light...") {
 		input "switch1", "capability.switch"
 	}
 }
@@ -47,3 +47,5 @@ def updated() {
 def accelerationActiveHandler(evt) {
 		switch1.on()
 	}
+
+

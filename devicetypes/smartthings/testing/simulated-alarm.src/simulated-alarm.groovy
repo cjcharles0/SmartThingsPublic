@@ -16,9 +16,6 @@
 metadata {
 	definition (name: "Simulated Alarm", namespace: "smartthings/testing", author: "SmartThings") {
 		capability "Alarm"
-		capability "Sensor"
-		capability "Actuator"
-		capability "Health Check"
 	}
 
 	simulator {
@@ -47,11 +44,6 @@ metadata {
 		main "alarm"
 		details(["alarm","strobe","siren","test","off"])
 	}
-}
-
-def installed() {
-	sendEvent(name: "DeviceWatch-DeviceStatus", value: "online")
-	sendEvent(name: "healthStatus", value: "online")
 }
 
 def strobe() {

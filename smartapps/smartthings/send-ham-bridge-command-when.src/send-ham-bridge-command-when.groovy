@@ -16,14 +16,15 @@
  *
  */
 definition(
-    name: "Send HAM Bridge Command When",
-    namespace: "smartthings",
+    name: "Send HAM Bridge Command When…",
+    namespace: "soletc.com",
     author: "Scottin Pollock",
     description: "Sends a command to your HAM Bridge server when SmartThings are activated.",
     category: "Convenience",
     iconUrl: "http://solutionsetcetera.com/stuff/STIcons/HB.png",
     iconX2Url: "http://solutionsetcetera.com/stuff/STIcons/HB@2x.png"
 )
+
 
 preferences {
 	section("Choose one or more, when..."){

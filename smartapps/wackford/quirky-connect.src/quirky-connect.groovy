@@ -58,8 +58,7 @@ definition(
     description: "Connect your Quirky to SmartThings.",
     category: "SmartThings Labs",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Partner/quirky.png",
-    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Partner/quirky@2x.png",
-    singleInstance: true
+    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Partner/quirky@2x.png"
 ) {
 	appSetting "clientId"
 	appSetting "clientSecret"

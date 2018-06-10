@@ -16,7 +16,6 @@ metadata {
 	definition (name: "Simulated Temperature Sensor", namespace: "smartthings/testing", author: "SmartThings") {
 		capability "Temperature Measurement"
 		capability "Switch Level"
-		capability "Sensor"
 
 		command "up"
 		command "down"

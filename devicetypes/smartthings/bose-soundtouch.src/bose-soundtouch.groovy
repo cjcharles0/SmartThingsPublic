@@ -1,5 +1,3 @@
-//DEPRECATED. INTEGRATION MOVED TO SUPER LAN CONNECT
-
 /**
  *  Bose SoundTouch
  *
@@ -29,9 +27,7 @@ metadata {
         capability "Switch"
         capability "Refresh"
         capability "Music Player"
-        capability "Health Check"
-        capability "Sensor"
-        capability "Actuator"
+        capability "Polling"
 
         /**
          * Define all commands, ie, if you have a custom action not
@@ -51,9 +47,6 @@ metadata {
 
         command "everywhereJoin"
         command "everywhereLeave"
-
-        command "forceOff"
-        command "forceOn"
     }
 
     /**
@@ -71,10 +64,8 @@ metadata {
     }
 
     standardTile("switch", "device.switch", width: 1, height: 1, canChangeIcon: true) {
-        state "on", label: '${name}', action: "forceOff", icon: "st.Electronics.electronics16", backgroundColor: "#00a0dc", nextState:"turningOff"
-        state "turningOff", label:'TURNING OFF', icon:"st.Electronics.electronics16", backgroundColor:"#ffffff"
-        state "off", label: '${name}', action: "forceOn", icon: "st.Electronics.electronics16", backgroundColor: "#ffffff", nextState:"turningOn"
-        state "turningOn", label:'TURNING ON', icon:"st.Electronics.electronics16", backgroundColor:"#00a0dc"
+        state "off", label: '${name}', action: "switch.on", icon: "st.Electronics.electronics16", backgroundColor: "#ffffff"
+        state "on", label: '${name}', action: "switch.off", icon: "st.Electronics.electronics16", backgroundColor: "#79b821"
     }
     valueTile("1", "device.station1", decoration: "flat", canChangeIcon: false) {
         state "station1", label:'${currentValue}', action:"preset1"
@@ -147,22 +138,8 @@ metadata {
  * one place.
  *
  */
-def off() {
-    if (device.currentState("switch")?.value == "on") {
-        onAction("off")
-    }
-}
-def forceOff() {
-    onAction("off")
-}
-def on() {
-    if (device.currentState("switch")?.value == "off") {
-        onAction("on")
-    }
-}
-def forceOn() {
-    onAction("on")
-}
+def off() { onAction("off") }
+def on() { onAction("on") }
 def volup() { onAction("volup") }
 def voldown() { onAction("voldown") }
 def preset1() { onAction("1") }
@@ -240,33 +217,7 @@ def parse(String event) {
  * @return action(s) to take or null
  */
 def installed() {
-    // Notify health check about this device with timeout interval 12 minutes
-    sendEvent(name: "checkInterval", value: 12 * 60, data: [protocol: "lan", hubHardwareId: device.hub.hardwareID], displayed: false)
-    startPoll()
-}
-
-/**
- * Called by health check if no events been generated in the last 12 minutes
- * If device doesn't respond it will be marked offline (not available)
- */
-def ping() {
-    TRACE("ping")
-    boseSendGetNowPlaying()
-}
-
-/**
- * Schedule a 2 minute poll of the device to refresh the
- * tiles so the user gets the correct information.
- */
-def startPoll() {
-    TRACE("startPoll")
-    unschedule()
-    // Schedule 2 minute polling of speaker status (song average length is 3-4 minutes)
-    def sec = Math.round(Math.floor(Math.random() * 60))
-    //def cron = "$sec 0/5 * * * ?" // every 5 min
-    def cron = "$sec 0/2 * * * ?" // every 2 min
-    log.debug "schedule('$cron', boseSendGetNowPlaying)"
-    schedule(cron, boseSendGetNowPlaying)
+    onAction("refresh")
 }
 
 /**
@@ -287,11 +238,11 @@ def onAction(String user, data=null) {
     def actions = null
     switch (user) {
         case "on":
-            boseSetPowerState(true)
+            actions = boseSetPowerState(true)
             break
         case "off":
             boseSetNowPlaying(null, "STANDBY")
-            boseSetPowerState(false)
+            actions = boseSetPowerState(false)
             break
         case "volume":
             actions = boseSetVolume(data)
@@ -344,6 +295,14 @@ def onAction(String user, data=null) {
     if (actions instanceof List)
         return actions.flatten()
     return actions
+}
+
+/**
+ * Called every so often (every 5 minutes actually) to refresh the
+ * tiles so the user gets the correct information.
+ */
+def poll() {
+    return boseRefreshNowPlaying()
 }
 
 /**
@@ -788,16 +747,8 @@ def cb_boseSetInput(xml, input) {
  */
 def boseSetPowerState(boolean enable) {
     log.info "boseSetPowerState(${enable})"
-    // Fix to get faster update of power status back from speaker after sending on/off
-    // Instead of queuing the command to be sent after the refresh send it directly via sendHubCommand
-    // Note: This is a temporary hack that should be replaced by a re-design of the
-    // DTH to use sendHubCommand for all commands
-    sendHubCommand(bosePOST("/key", "<key state=\"press\" sender=\"Gabbo\">POWER</key>")) 
-    sendHubCommand(bosePOST("/key", "<key state=\"release\" sender=\"Gabbo\">POWER</key>"))
-    sendHubCommand(boseGET("/now_playing"))
-    if (enable) {
-        queueCallback('nowPlaying', "cb_boseConfirmPowerOn", 5)
-    }
+    queueCallback('nowPlaying', "cb_boseSetPowerState", enable ? "POWERON" : "POWEROFF")
+    return boseRefreshNowPlaying()
 }
 
 /**
@@ -836,11 +787,10 @@ def cb_boseSetPowerState(xml, state) {
  */
 def cb_boseConfirmPowerOn(xml, tries) {
     def result = []
-    def attempt = tries as Integer
-    log.warn "boseConfirmPowerOn() attempt #$attempt"
-    if (xml.attributes()['source'] == "STANDBY" && attempt > 0) {
+    log.warn "boseConfirmPowerOn() attempt #" + tries
+    if (xml.attributes()['source'] == "STANDBY" && tries > 0) {
         result << boseRefreshNowPlaying()
-        queueCallback('nowPlaying', "cb_boseConfirmPowerOn", attempt-1)
+        queueCallback('nowPlaying', "cb_boseConfirmPowerOn", tries-1)
     }
     return result
 }
@@ -857,10 +807,6 @@ def boseRefreshNowPlaying(delay=0) {
         return ["delay ${delay}", boseGET("/now_playing")]
     }
     return boseGET("/now_playing")
-}
-
-def boseSendGetNowPlaying() {
-    sendHubCommand(boseGET("/now_playing"))
 }
 
 /**
@@ -1040,8 +986,4 @@ def boseGetDeviceID() {
  */
 def getDeviceIP() {
     return parent.resolveDNI2Address(device.deviceNetworkId)
-}
-
-def TRACE(text) {
-    log.trace "${text}"
 }

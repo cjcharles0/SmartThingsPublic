@@ -21,8 +21,7 @@ definition(
     description: "Control a space heater or window air conditioner in conjunction with any temperature sensor, like a SmartSense Multi.",
     category: "Green Living",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Meta/temp_thermo-switch.png",
-    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Meta/temp_thermo-switch@2x.png",
-    pausable: true
+    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Meta/temp_thermo-switch@2x.png"
 )
 
 preferences {

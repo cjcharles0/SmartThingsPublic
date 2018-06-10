@@ -14,9 +14,7 @@ definition(
     category: "My Apps",
     iconUrl: "http://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Star_of_David.svg/200px-Star_of_David.svg.png",
     iconX2Url: "http://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Star_of_David.svg/200px-Star_of_David.svg.png",
-    iconX3Url: "http://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Star_of_David.svg/200px-Star_of_David.svg.png",
-    pausable: true
-)
+    iconX3Url: "http://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Star_of_David.svg/200px-Star_of_David.svg.png")
 
 preferences {
 	
@@ -32,7 +30,7 @@ preferences {
 		input "havdalahOffset", "number", title: "Minutes After Sundown", required:true
 	} 
 	section("Your ZipCode") {
-		input "zipcode", "text", title: "ZipCode", required:true
+		input "zipcode", "number", title: "ZipCode", required:true
 	}
     section( "Notifications" ) {
         input "sendPushMessage", "enum", title: "Send a push notification?", metadata:[values:["Yes","No"]], required:false

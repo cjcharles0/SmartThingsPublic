@@ -1,9 +1,6 @@
 metadata {
-	definition (name: "Simulated Color Control", namespace: "smartthings/testing", author: "SmartThings") {
+	definition (name: "Color Control Capability", namespace: "capabilities", author: "SmartThings") {
     	capability "Color Control"
-		capability "Sensor"
-		capability "Actuator"
-		capability "Health Check"
 	}
 
 	simulator {
@@ -23,11 +20,6 @@ metadata {
         main "rgbSelector"
         details(["rgbSelector", "saturation", "hue"])
 	}
-}
-
-def installed() {
-	sendEvent(name: "DeviceWatch-DeviceStatus", value: "online")
-	sendEvent(name: "healthStatus", value: "online")
 }
 
 // parse events into attributes

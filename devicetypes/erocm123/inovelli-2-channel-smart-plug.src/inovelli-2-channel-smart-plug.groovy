@@ -27,7 +27,7 @@ metadata {
 		capability "Refresh"
 		capability "Health Check"
 
-		fingerprint manufacturer: "015D", prod: "0221", model: "251C", deviceJoinName: "Show Home 2-Channel Smart Plug"
+		fingerprint manufacturer: "015D", prod: "0221", model: "251C", deviceJoinName: "Inovelli 2-Channel Smart Plug"
 		fingerprint manufacturer: "0312", prod: "0221", model: "251C", deviceJoinName: "Inovelli 2-Channel Smart Plug"
 		fingerprint manufacturer: "0312", prod: "B221", model: "251C", deviceJoinName: "Inovelli 2-Channel Smart Plug"
 		fingerprint manufacturer: "0312", prod: "0221", model: "611C", deviceJoinName: "Inovelli 2-Channel Outdoor Smart Plug"
@@ -82,7 +82,7 @@ def zwaveEvent(physicalgraph.zwave.commands.basicv1.BasicReport cmd, ep = null) 
 			def allOff = true
 			childDevices.each {
 				n ->
-					if (n.currentState("switch").value != "off") allOff = false
+					if (n.deviceNetworkId != "$device.deviceNetworkId-ep$ep" && n.currentState("switch").value != "off") allOff = false
 			}
 			if (allOff) {
 				event = [createEvent([name: "switch", value: "off"])]
